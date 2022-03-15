@@ -12,8 +12,8 @@ load local files under the same directory into the browser.
 in your terminal.
 Then, open http://localhost:8000/ and navigate to the location of the index.html to open it.
 
-- Or disable the restriction (but should be enabled for further browsing):
-        - Firefox: enter "about:config" and then change the value of "privacy.file_unique_origin" to false
+- Or disable the restriction (but should be enabled for further browsing):  
+        - Firefox: enter "about:config" and then change the value of "privacy.file_unique_origin" to false  
         - Chrome: https://www.chromium.org/developers/how-tos/run-chromium-with-flags  
         https://stackoverflow.com/questions/3102819/disable-same-origin-policy-in-chrome
 
