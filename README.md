@@ -11,7 +11,7 @@ This tool is designed for anybody who'd like to start exploring the domain of ma
 
 # Get started
 
-To start, download the **.zip file** and run the index.html file.
+To start, download or clone the project and run the index.html file.
 
 Due to same origin security policy (cors), by default, it is no longer an option to load local files under the same directory into the browser.
 
