@@ -9,10 +9,6 @@ This tool is designed for anybody who'd like to start exploring the domain of ar
 
 ![image](https://user-images.githubusercontent.com/29278598/158385697-f150b237-3578-410b-9f6c-ff35324a45b9.png)
 
-# Paper
-
-http://proceedings.mlr.press/v141/elia21a/elia21a.pdf 
-
 # Get started
 
 To start, download the **.zip file** and run the index.html file.
@@ -32,3 +28,7 @@ Then, open http://localhost:8000/ and navigate to the location of the index.html
         - Chrome: https://www.chromium.org/developers/how-tos/run-chromium-with-flags  
         https://stackoverflow.com/questions/3102819/disable-same-origin-policy-in-chrome
 
+
+# Paper
+
+http://proceedings.mlr.press/v141/elia21a/elia21a.pdf 
