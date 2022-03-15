@@ -1,6 +1,6 @@
 # Decision-tree-learning
 
-This tool is designed for anybody who'd like to start exploring the domain of artificial intelligence. Please consider the following when using the software:
+This tool is designed for anybody who'd like to start exploring the domain of machine learning. Please consider the following when using the software:
 
 - Data input files have to be .csv files in utf-8 encoding, separated by semi-colon (;)
 - First row is interpreted as attribute names, the last column as category attributes
