@@ -1,6 +1,6 @@
 # decision-tree-learning
 
-To start, download the whole package and run the index.html file.
+To start, download the **.zip file** and run the index.html file.
 This project won't work properly with Microsoft Edge. 
 Please use Firefox or Chrome.
 
