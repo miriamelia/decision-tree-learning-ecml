@@ -1,4 +1,4 @@
-# Decision-tree-learning
+# Decision Tree Learning
 
 This tool is designed for anybody who'd like to start exploring the domain of machine learning. Please consider the following when using the software:
 
