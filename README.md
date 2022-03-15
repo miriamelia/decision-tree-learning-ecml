@@ -9,7 +9,7 @@ load local files under the same directory into the browser. However, to use this
 it is necessary to access the .js files.
 
 Simply run 
-python -m http.server 
+**python -m http.server**
 in your terminal.
 Then, open http://localhost:8000/ and navigate to the location of the index.html to open it.
 
