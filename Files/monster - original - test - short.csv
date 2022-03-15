@@ -1,0 +1,11 @@
+﻿Kraft;tot;reden;Farbe;Geschwindigkeit;Ernährung;Typ
+schwach;nein;ja;braun;normal;unbekannt;Werwolf
+normal;nein;nein;schwarz;schnell;unbekannt;Werwolf
+stark;nein;nein;weiß;langsam;unbekannt;Werwolf
+schwach;ja;ja;weiß;schnell;Tiere;Vampir
+normal;ja;ja;weiß;normal;Menschen;Vampir
+stark;ja;ja;hautfarben;schnell;Menschen;Vampir
+normal;nein;nein;braun;normal;unbekannt;Yeti
+normal;nein;nein;weiß;langsam;Insekten;Yeti
+stark;nein;nein;weiß;normal;unbekannt;Yeti
+schwach;ja;ja;durchsichtig;schnell;keine;Geist

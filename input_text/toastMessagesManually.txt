@@ -1,0 +1,8 @@
+You might want to build a tree using only the highest/lowest information gain.
+A high information gain probably leads to an optimized tree.
+You might want to build a tree using only the highest/lowest gini index.
+A low gini index probably leads to an optimized tree.
+What is the gini index?
+What happens if you mix a "good" versus a "bad" decision using a particular pattern? Let's give it a try!
+You might want to check your model against your data. Does the resulted tree seem plausible to you?
+What is entropy?

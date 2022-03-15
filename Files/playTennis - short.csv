@@ -1,0 +1,10 @@
+﻿Outlook;Temperature;Humidity;Wind;Tennis
+sunny;hot;high;weak;no
+overcast;hot;high;weak;yes
+rain;cool;normal;strong;no
+overcast;cool;normal;strong;yes
+sunny;mild;high;weak;no
+sunny;mild;normal;strong;yes
+overcast;mild;high;strong;yes
+overcast;hot;normal;weak;yes
+rain;mild;high;strong;no

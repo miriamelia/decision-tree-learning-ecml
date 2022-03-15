@@ -1,0 +1,106 @@
+/**
+    Some style information mainly to position the html elements on the right level
+ */
+
+/*
+.table-striped {
+    position: absolute;
+    z-index: 9; -2
+}
+*/
+
+.body {
+    display: flex;
+}
+
+main {
+    flex: 1;
+}
+
+#sidebar-wrapper {
+    z-index: 11; /*1*/
+}
+
+.navbar {
+    z-index: 12; /*2*/
+}
+
+.footer {
+    /*height: 15px;*/
+    height: 2.5rem;            /* Footer height */
+}
+
+#displayData {
+    position: absolute;
+    z-index: 9;
+    background-color: #f1f1f1;
+    text-align: center;
+    border: 1px solid #d3d3d3;
+    left: 375px;
+    resize: both;
+    overflow: auto;
+    padding: 5px;
+}
+
+#displayTestData {
+    position: absolute;
+    z-index: 9;
+    background-color: #f1f1f1;
+    text-align: center;
+    border: 1px solid #d3d3d3;
+    /*
+    top: 6.2%;*/
+    top: 60px;
+    left: 1150px;
+    resize: both;
+    overflow: auto;
+    padding: 5px;
+}
+
+#displayDataHeader {
+    padding: 5px;
+    cursor: move;
+    z-index: 10;
+    background-color: #939BA2;
+    color: #fff;
+    width: 100%;
+}
+
+#displayTestDataHeader {
+    padding: 5px;
+    cursor: move;
+    z-index: 10;
+    background-color: #939BA2;
+    color: #fff;
+    width: 100%;
+}
+
+#displayTree {
+    position: absolute;
+    z-index: 9;
+    background-color: #f1f1f1;
+    text-align: center;
+    border: 1px solid #d3d3d3;
+    left: 25%;
+    top: 70%;
+    padding-bottom: 15px;
+    cursor: move;
+}
+
+#col1 {
+    height: 100%;
+}
+
+/* Modify the background color */
+.navbar-custom {
+    background-color:	#6C757D; /*#606060;#585858; #696969 #707070;*/
+}
+
+p {
+    margin:0;
+    padding:0;
+}
+
+.table-striped tr:hover {
+    background-color: lightsteelblue !important;;
+}

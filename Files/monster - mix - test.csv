@@ -1,0 +1,16 @@
+﻿Kraft;tot;reden;Farbe;Geschwindigkeit;Ernährung;Gewicht;Typ
+normal;nein;nein;braun;normal;unbekannt;200;Werwolf
+normal;nein;ja;braun;langsam;unbekannt;150;Werwolf
+stark;nein;nein;braun;schnell;Insekten;90;Werwolf
+schwach;ja;ja;weiß;schnell;Tiere;78;Vampir
+normal;ja;nein;weiß;normal;Blut;60;Vampir
+stark;ja;nein;hautfarben;schnell;Menschen;49;Vampir
+normal;nein;ja;braun;normal;unbekannt;50;Yeti
+normal;nein;nein;weiß;normal;unbekannt;180;Yeti
+stark;nein;ja;weiß;schnell;unbekannt;200;Yeti
+stark;ja;nein;hautfarben;normal;keine;5;Geist
+stark;ja;ja;weiß;normal;keine;3;Geist
+schwach;ja;ja;grün;normal;Kuchen;2;Geist
+normal;nein;nein;weiß;langsam;Menschen;120;Zombie
+normal;ja;nein;grün;normal;unbekannt;55;Zombie
+stark;nein;nein;weiß;langsam;unbekannt;90;Zombie

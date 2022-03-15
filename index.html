@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Decision Tree Learning</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link rel="stylesheet" href="css/simple-sidebar.css">
+  <link rel="icon" href="images/tree.ico">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/decision-tree-format.css">
+
+  <!-- Font Awesome JS -->
+  <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+  <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+</head>
+
+<body class="d-flex flex-column" style="min-height: 100vh" id="body">
+<main class="flex-fill overflow-auto" id="main">
+  <!-- Content that will be toggled by button click -->
+  <div class="d-flex flex-row-reverse toggled " id="wrapper">
+    <!-- Sidebar -->
+    <div class="bg-light border-right"  id="sidebar-wrapper" onclick = "removeClassSpecial();">
+      <div class="sidebar-heading"> </div>
+      <br>
+      <br>
+      <div class="list-group list-group-flush">
+
+        <div class="list-group-item list-group-item-action bg-light">
+          <div class="list-group list-group-flush">
+            <div class="sidebar-heading">Method</div>
+            <div class="custom-control custom-checkbox py-1">
+              <input type="checkbox" class="custom-control-input" id="entropy" checked>
+              <label class="custom-control-label" for="entropy">Entropy</label>
+            </div>
+            <div class="custom-control custom-checkbox py-1">
+              <input type="checkbox" class="custom-control-input" id="gini">
+              <label class="custom-control-label" for="gini">Gini Index</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="list-group-item list-group-item-action bg-light">
+          <div class="list-group list-group-flush">
+            <div class="sidebar-heading">Mode</div>
+              <div class="custom-control custom-checkbox py-1">
+                  <input type="checkbox" class="custom-control-input" id="automatically" checked>
+                  <label class="custom-control-label" for="automatically">Automatic</label>
+              </div>
+            <div class="custom-control custom-checkbox py-1">
+              <input type="checkbox" class="custom-control-input" id="stepwise">
+              <label class="custom-control-label" for="stepwise">Stepwise</label>
+            </div>
+            <div class="custom-control custom-checkbox py-1">
+              <input type="checkbox" class="custom-control-input" id="manually">
+              <label class="custom-control-label" for="manually">Manual</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="list-group-item list-group-item-action bg-light">
+          <div class="sidebar-heading">Tools</div>
+          <div class="list-group-item-action bg-light py-2">
+            <button type="button" class="btn btn-secondary btn-block " id="build">build</button>
+          </div>
+          <div class="list-group-item-action bg-light py-2">
+            <button type="button" class="btn btn-secondary btn-block " id="reverseSplit">undo</button>
+          </div>
+          <div class="list-group-item-action bg-light py-2">
+            <button type="button" class="btn btn-secondary btn-block " id="redoSplit">redo</button>
+          </div>
+          <div class="list-group-item-action bg-light py-2">
+            <button type="button" class="btn btn-secondary btn-block" id="clear">clear</button>
+          </div>
+        </div>
+
+        <div class="list-group-item list-group-item-action bg-light">
+          <div class="sidebar-heading">Analysis</div>
+          <div class="list-group-item-action bg-light py-2">
+            <button type="button" class="btn btn-secondary btn-block " id="test">test data</button>
+          </div>
+          <div class="list-group-item-action bg-light py-2">
+            <table class="table table-bordered table-sm table-hover" id="results">
+              <tbody>
+              <tr>
+                <td style="font-size: 14px">Accuracy</td>
+                <td id="accuracy" style="font-size: 14px"> </td>
+              </tr>
+              <tr>
+                <td style="font-size: 14px">Correct</td>
+                <td style="font-size: 14px" id="correct"> </td>
+              </tr>
+              <tr>
+                <td style="font-size: 14px">Incorrect</td>
+                <td style="font-size: 14px" id="incorrect"> </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+  </div>
+
+
+    <!-- Page Content -->
+    <div class="overflow-auto" id="page-content-wrapper">
+      <!-- Navbar remains horizontal -->
+      <nav class="bg-secondary navbar navbar-expand navbar-dark navbar-custom" id="top_nav" onclick = "removeClassSpecial();">  <!-- bg-dark -->
+        <!-- Logo -->
+        <a class="navbar-brand" href="#">
+          <img src="./images/tree.png" alt="Logo" style="width:38px; margin-bottom:4px; ">
+        </a>
+        <a class="navbar-brand" href="#">Decision Tree Learning</a>
+
+        <!-- Links in Navbar focused on right side-->
+        <ul class="bg-secondary  navbar-custom navbar-nav ml-auto">
+          <li class="bg-secondary nav-item">
+            <a class="navbar-brand" target="_blank" href="https://www.uni-augsburg.de/en/fakultaet/fai/isse/" style="margin-left:10px; margin-right: 5px; text-align: center;">
+              <img src="./images/images_ISSE-logo.png" alt="Logo" style="width:50px;">
+            </a>
+          </li>
+
+          <li class="bg-secondary nav-item">
+            <a class="btn btn-default bg-transparent shadow-none btn-block text-white-50 navbar-custom align-content-center" href="#" role="button" onclick="readTextFile(); $('.toast').toast('show'); " id="countClicks" style="border:none; margin-top:3px;">Hint</a>
+            <!-- text-white-50 -->
+          </li>
+          <li class="bg-secondary nav-item dropdown navbar-custom">
+            <a class="nav-link dropdown-toggle text-white-50" href="#" id="navbardrop" data-toggle="dropdown">Data</a>
+            <div class="dropdown-menu">
+              <a href="#" class="dropdown-item" id="importFileCSV" onclick="document.getElementById('csvFile').click();">Import Training Data</a>
+              <form enctype="multipart/form-data" method="post">
+                <input type="file" accept=".csv" style="display:none;" id="csvFile" name="csvFile"/>
+              </form>
+              <a href="#" class="dropdown-item" id="importTestFileCSV" onclick="document.getElementById('csvFileTest').click();">Import Test Data</a>
+              <form enctype="multipart/form-data" method="post">
+                <input type="file" accept=".csv" style="display:none;" id="csvFileTest" name="csvFileTest"/>
+              </form>
+
+              <a href="#" class="dropdown-item" id="saveSessionId" onclick="saveTextAsFile()">Save Session</a>
+              <form enctype="multipart/form-data" method="get">
+              <input type="file" accept=".txt" style="display:none;" id="saveSession" name="saveSession"/>
+              </form>
+              <a href="#" class="dropdown-item" id="loadSessionId" onclick="document.getElementById('loadSession').click();">Load Session</a>
+              <form enctype="multipart/form-data" method="post">
+                <input type="file" accept=".txt" style="display:none;" id="loadSession" name="loadSession"/>
+              </form>
+
+              <a href="#" class="dropdown-item" id="loadFile" onclick="loadDefaultData();">Load Default Data</a>
+
+              <a href="#" class="dropdown-item" id="unloadFileXml" onclick="clearCSVDoc();">Clear</a>
+            </div>
+          </li>
+
+          <li class="bg-secondary nav-item navbar-custom">
+            <a class="nav-link text-white-50" href="#" data-toggle="modal" data-target="#aboutInfoBox">About</a>
+          </li>
+
+          <li class="bg-secondary nav-item">
+            <button class="bg-transparent btn btn-default shadow-none navbar-custom" id="menu-toggle" style="border: none; text-align: center;"> <span class="navbar-toggler-icon"></span></button> <!-- btn-primary btn-dark -->
+          </li>
+        </ul>
+      </nav>
+
+      <!-- About modal -->
+      <div class="modal fade" id="aboutInfoBox" tabindex="-1" role="dialog" aria-labelledby="aboutInfoBoxCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="aboutInfoBoxTitle">About Decision Tree Learning</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <p class="modal-body">
+              This tool is designed for anybody eager to commence diving into the domain of artificial intelligence. Please consider the following when using the software:
+              <br>
+              <br>
+              - Data input files have to be .csv files in utf-8 encoding, separated by semi-colon (;)<br>
+              - First row is interpreted as attribute names, the last column as category attributes<br>
+              - Up to 10 different result classes or category attributes can be displayed<br>
+              - To test a data set, the attributes have to be aligned in the same order as with the training set
+            </p>
+            <div class="modal-footer justify-content-between" style="font-size: 10px;">
+                <p> © 2019 Miriam Elia with ISSE at the University of Augsburg.
+                <br>
+               Here is our <a href="https://www.uni-augsburg.de/de/impressum/" target="_blank">Imprint</a> and our <a href="https://www.uni-augsburg.de/de/impressum/datenschutz/" target="_blank">Data Privacy Statement</a>.
+                </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main content -->
+      <div class="container-fluid">
+        <div class="row h-100" id="row" >
+          <!-- First Column contains hint toast message and displays detailed information about a node -->
+           <div class="col-md-auto d-flex flex-column" id="col1" style=" background-color: #F8F9FA">
+            <div id="toast" role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="false"  style="top:5%; left: 5%; bottom: 5%;">
+              <div class="toast-header" id="toastHeader">
+                <img src="./images/tree.png" alt="Logo" style="width:20px;">
+                <strong class="ml-1 mr-auto">Hint</strong>
+                <small></small>
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="toast-body" id="toastMsg">Need a hint? :)</div>
+            </div>
+
+            <div class="card" style="border: none;  background-color: #F8F9FA">
+              <div class="card-body" id="cardBody">
+                <h5 class="card-title" id="cardTitle">Detailed Image of Data</h5>
+                <br>
+                <div id="node">
+                  <canvas id="pieDiagram" width="300" height="300"> </canvas>
+                  <h5 id="splitOptions"></h5>
+                  <br>
+                  <table width="300">
+                    <tr class="w-100">
+                      <td class="w-100"><ul  class="list-group w-100" ><button class="d-flex justify-content-center list-group-item list-group-item-action btn btn-secondary btn-block" onclick="hideOrShow()" id="eyeButton" style="visibility: hidden">
+                        <span id="eye" class="  fa fa-fw fa-eye field_icon toggle-password" ></span></button></ul></td>
+                    </tr>
+                  </table>
+                  <table  width="300" height="300">
+                    <tr class="w-100">
+                      <td class="w-50"><ul  class="list-group " id="nodeContent0"></ul></td>
+                      <td class="w-50"><ul  class="list-group " id="nodeContent00"></ul></td>
+                    </tr>
+                    <tr class="w-100">
+                      <td class="w-50"><ul  class="list-group" id="nodeContent"></ul></td>
+                      <td class="w-50"><ul  class="list-group" id="nodeContent2"></ul></td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--  Second column displays the decision tree d-inline-flex flex-column
+          <div class="col-xl-7 overflow-auto "  id="col2">
+            <h2 id="treeHeadline" class="d-flex order-1 mx-auto justify-content-center" style="margin-top: 5%">Decision Tree</h2>
+            <br/>
+            <br/>
+          </div>-->
+            <div class="order-2 mx-auto tree justify-content-center special" id="displayTree"></div>
+
+          <!-- Third column displays the data -->
+          <div id="displayData" class="d-flex flex-column-reverse overflow-auto">
+            <div id="displayDataHeader" class="d-flex order-1 mx-auto justify-content-center">Training Data</div>
+              <div class="table-responsive " id="tableData" style="width:100%;">
+                <table class="table-striped table-fixed" id="data" style="width:100%;"></table>
+              </div>
+          </div>
+        </div>
+
+          <div id="displayTestData" class="d-flex flex-column-reverse overflow-auto ">
+          <div id="displayTestDataHeader" class="d-flex order-1 mx-auto justify-content-center">Test Data</div>
+          <div class="table-responsive " id="tableDataTest" style="width:100%;">
+            <table class="table-striped table-fixed" id="testData" style="width:100%;"></table>
+          </div>
+        </div>
+
+          <!-- Row -->
+      </div>
+      <!-- Container -->
+    </div>
+    <!-- Page content -->
+  </div>
+  <!-- Sidebar -->
+
+
+<!-- Footer -->
+<footer class="bg-light text-white-50 small"  id="footer">
+  <!-- Copyright -->
+  <div class="footer-copyright text-center pb-2 " style="font-size: 10px; color: #343a40">
+      <p> © 2019 Miriam Elia with ISSE at the University of Augsburg.
+          <br>
+          Here is our <a href="https://www.uni-augsburg.de/de/impressum/" target="_blank">Imprint</a> and our <a href="https://www.uni-augsburg.de/de/impressum/datenschutz/" target="_blank">Data Privacy Statement</a>.
+      </p>
+  </div>
+</footer>
+<!-- Footer -->
+</main>
+
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src=https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+
+<!-- Personal JavaScript -->
+<script src="js/decision-tree.js" ></script>
+<script src="js/parse-table.js" ></script>
+<script src="js/pie-chart.js" ></script>
+<script src="js/test-data.js" ></script>
+<script src="js/file-manager.js" ></script>
+<script src="js/main.js"></script>
+
+<script>
+  $("#menu-toggle").click(function(e) {
+    e.preventDefault();
+    $("#sidebar-wrapper").toggle();
+  });
+
+  function removeClassSpecial() {
+    $('li').removeClass('special');
+    $('ul').removeClass('special');
+    $('a').removeClass('special');
+    var table = document.getElementById('testData');
+    var rowsNotSelected = table.getElementsByTagName('tr');
+    for (var row = 0; row < rowsNotSelected.length; row++) {
+      rowsNotSelected[row].style.fontWeight = "normal";
+      rowsNotSelected[row].classList.remove('selected');
+    }
+    var tree = document.getElementById('displayTree');
+    var nodes = tree.getElementsByTagName('A');
+    for (var i = 0; i < nodes.length; i++) {
+      nodes[i].style.fontWeight = "normal";
+    }
+  }
+
+  var tree = document.getElementById('row');
+  tree.onclick = function (e) {
+    if(e.target.tagName === "LI" || e.target.tagName === "B" || e.target.tagName === "UL" || e.target.tagName === "A") {
+      return;
+    }
+    removeClassSpecial();
+  }
+
+  /* By default, hint toast message is displayed */
+  $('.toast').toast('show');
+
+  /* to hide / show information gain (gini gain) */
+  function hideOrShow() {
+    var x = document.getElementById("nodeContent2");
+    if (x.style.display === "none") {
+      x.style.display = "block";
+      document.getElementById("eye").outerHTML = '<span id="eye" class="fa fa-fw fa-eye field_icon toggle-password"></span>';
+    } else {
+      x.style.display = "none";
+      document.getElementById("eye").outerHTML = '<span id="eye" class="fa fa-eye fa-eye-slash field_icon toggle-password"></span>';
+    }
+  }
+
+  /* Buttons disabled if not mode manually;
+  checkbox gini disabled by default */
+  $(document).ready(function() {
+    $('#reverseSplit').prop('disabled', true);
+    $('#redoSplit').prop('disabled', true);
+    $('#manually').click(function () {
+      if ($(this).is(':checked')) {
+        $('#reverseSplit').prop('disabled', false);
+        $('#redoSplit').prop('disabled', false);
+      } else {
+        document.getElementById("splitOptions").innerText = "";
+        $('#reverseSplit').prop('disabled', true);
+        $('#redoSplit').prop('disabled', true);
+      }
+    });
+    $('#entropy').change(function () {
+      emptyAllExceptData();
+      if($(this).is(':checked')) {
+        $("#gini").prop("checked",false);
+      } else {
+        $("#gini").prop("checked",true);
+      }
+    });
+    $('#gini').change(function () {
+      emptyAllExceptData()
+      if($(this).is(':checked')) {
+        $("#entropy").prop("checked",false);
+      } else {
+        $("#entropy").prop("checked",true);
+      }
+    });
+      $('#automatically').change(function () {
+          emptyAllExceptData()
+          if ($(this).is(':checked')) {
+              $('#manually').prop('checked', false);
+              $('#stepwise').prop('checked', false);
+              $('#reverseSplit').prop('disabled', true);
+              $('#redoSplit').prop('disabled', true);
+              document.getElementById("splitOptions").innerText = "";
+              document.getElementById('eyeButton').style.visibility = "hidden";
+          }
+        if(!$(this).is(':checked') && !$('#manually').is(':checked') && !$('#stepwise').is(':checked')) {
+          $('#automatically').prop('checked', true);
+        }
+      });
+    $('#stepwise').change(function () {
+      emptyAllExceptData()
+      if ($(this).is(':checked')) {
+        $('#manually').prop('checked', false);
+        $('#automatically').prop('checked', false);
+        $('#reverseSplit').prop('disabled', true);
+        $('#redoSplit').prop('disabled', true);
+        document.getElementById("splitOptions").innerText = "";
+        document.getElementById('eyeButton').style.visibility = "hidden";
+      }
+      if(!$(this).is(':checked') && !$('#manually').is(':checked')) {
+        $('#automatically').prop('checked', true);
+      }
+    });
+    $('#manually').change(function () {
+      emptyAllExceptData()
+      if ($(this).is(':checked')) {
+        $('#stepwise').prop('checked', false);
+        $('#automatically').prop('checked', false);
+      }
+      if(!$(this).is(':checked') && !$('#stepwise').is(':checked')) {
+        $('#automatically').prop('checked', true);
+      }
+    });
+  });
+
+  function clearCSVDoc() {
+    document.location.reload();
+  }
+
+  function removeMarksInData() {
+      var table = document.getElementById('testData');
+      var rows = table.getElementsByTagName('tr');
+      for (var i = 0; i < rows.length; i++) {
+          rows[i].style.fontWeight = "normal";
+          rows[i].classList.remove('selected');
+      }
+      deleteLastColumn();
+      // remove marks in data
+      var rows = document.getElementById("data").innerText;
+      var rowsTest = document.getElementById("testData").innerText;
+      if (rows !== "") {
+          if (!(rowsTest === "")) {
+              rowsTest = rowsTest.split("\n");
+              for (var m = 0; m < rowsTest.length; m++) {
+                  document.getElementById("rowtest" + m.toString()).style.backgroundColor = "";
+              }
+          }
+          rows = rows.split("\n")
+          for (var m = 0; m < rows.length; m++) {
+              document.getElementById("row" + m.toString()).style.backgroundColor = "";
+          }
+      }
+  }
+
+  function emptyAllExceptData() {
+      removeMarksInData();
+      document.getElementById("nodeContent0").innerHTML = ""
+      document.getElementById("nodeContent00").innerHTML = ""
+      document.getElementById('nodeContent').innerHTML = ""
+      document.getElementById("nodeContent2").innerHTML = ""
+      document.getElementById("displayTree").innerHTML = ""
+      document.getElementById("accuracy").innerText = "";
+      document.getElementById("correct").innerText = "";
+      document.getElementById("incorrect").innerText = "";
+      $('#pieDiagram').remove();
+      $('#node').prepend('<canvas id="pieDiagram"><canvas>');
+      allIds = [];
+      resultWay = ["start"];
+      numeric = false;
+  }
+
+  function emptyAll() {
+    var table = document.getElementById('testData');
+    var rows = table.getElementsByTagName('tr');
+    for (var i = 0; i < rows.length; i++) {
+      rows[i].style.fontWeight = "normal";
+      rows[i].classList.remove('selected');
+    }
+    allCategories = [];
+    categoryColor = [];
+    allIds = [];
+    numeric = false;
+    resultWay = ["start"];
+    document.getElementById("data").innerHTML = "";
+    //document.getElementById("testData").innerHTML = "";
+    document.getElementById("nodeContent0").innerHTML = ""
+    document.getElementById("nodeContent00").innerHTML = ""
+    document.getElementById("nodeContent").innerHTML = ""
+    document.getElementById("nodeContent2").innerHTML = ""
+    document.getElementById("displayTree").innerHTML = "";
+    $('#pieDiagram').remove();
+    $('#node').prepend('<canvas id="pieDiagram"><canvas>');
+    document.getElementById("accuracy").innerText = "";
+    document.getElementById("correct").innerText = "";
+    document.getElementById("incorrect").innerText = "";
+  }
+
+  function emptyData(tableId) {
+    document.getElementById(tableId.toString()).innerHTML = "";
+  }
+
+  /* import csv file: make sure file is saved in utf-8 !
+  -1: new row being inserted at the last position;
+   resets all values for stepwise and clear displayTree section on change of mode */
+  $("#csvFile").change(function(){
+    if(importData("csvFile", "data", "")) {
+      emptyAll();
+    }
+  });
+
+  /* import test csv file: make sure file is saved in utf-8 !
+  -1: new row being inserted at the last position; */
+  $("#csvFileTest").change(function(){
+    if(importData("csvFileTest", "testData", "test")) {
+      emptyData("testData")
+    }
+  });
+
+  /* open File Manager */
+  $("#loadSession").change(function(){
+    emptyAll();
+    loadFileAsText();
+  });
+
+  /* choose file according to checkbox: both files need same length; loops through textfile and displays line of click count.
+  If max_clicks reached: start from top */
+  var count = -1;
+  var file = './input_text/toastMessagesAutomatically.txt';
+  function readTextFile() {
+    $('#manually').click(function(){
+      if($(this).is(':checked')) {
+        file = './input_text/toastMessagesManually.txt';
+      }
+      else {
+        file = './input_text/toastMessagesAutomatically.txt';
+      }
+    });
+    var com = new XMLHttpRequest();
+    com.open('GET', file);
+    com.onreadystatechange = function() {
+      if(com.responseText !== '') {
+        var txt = com.responseText.split("\n");
+        document.getElementById("toastMsg").innerHTML = txt[count];
+      }
+    };
+    com.send();
+    count += 1;
+    if(count === 8) {
+      count = 0;
+    }
+  }
+
+  //Make the DIV element draggable:
+  dragElement(document.getElementById("displayData"));
+  dragElement(document.getElementById("displayTestData"));
+  dragElement(document.getElementById("displayTree"));
+
+  function dragElement(elmnt) {
+    var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    if (document.getElementById(elmnt.id + "Header")) {
+      /* if present, the header is where you move the DIV from:*/
+      document.getElementById(elmnt.id + "Header").onmousedown = dragMouseDown;
+    } else {
+      /* otherwise, move the DIV from anywhere inside the DIV:*/
+      elmnt.onmousedown = dragMouseDown;
+    }
+
+    function dragMouseDown(e) {
+      e = e || window.event;
+      e.preventDefault();
+      // get the mouse cursor position at startup:
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+      document.onmouseup = closeDragElement;
+      // call a function whenever the cursor moves:
+      document.onmousemove = elementDrag;
+    }
+
+    function elementDrag(e) {
+      e = e || window.event;
+      e.preventDefault();
+      // calculate the new cursor position:
+      pos1 = pos3 - e.clientX;
+      pos2 = pos4 - e.clientY;
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+      // set the element's new position:
+      elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+      elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+      document.getElementById("footer").style.marginTop = (elmnt.offsetTop/2 - pos2) + "px";
+    }
+
+    function closeDragElement() {
+      /* stop moving when mouse button is released:*/
+      document.onmouseup = null;
+      document.onmousemove = null;
+    }
+  }
+</script>
+</body>
+
+</html>
