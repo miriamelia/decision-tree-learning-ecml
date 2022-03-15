@@ -1,4 +1,19 @@
-# decision-tree-learning
+# Decision-tree-learning
+
+This tool is designed for anybody who'd like to start exploring the domain of artificial intelligence. Please consider the following when using the software:
+
+- Data input files have to be .csv files in utf-8 encoding, separated by semi-colon (;)
+- First row is interpreted as attribute names, the last column as category attributes
+- Up to 10 different result classes or category attributes can be displayed
+- To test a data set, the attributes have to be aligned in the same order as with the training set
+
+![image](https://user-images.githubusercontent.com/29278598/158385697-f150b237-3578-410b-9f6c-ff35324a45b9.png)
+
+# Paper
+
+http://proceedings.mlr.press/v141/elia21a/elia21a.pdf 
+
+# Get started
 
 To start, download the **.zip file** and run the index.html file.
 This project won't work properly with Microsoft Edge. 
