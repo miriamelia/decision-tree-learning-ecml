@@ -1,7 +1,7 @@
 Entropy calculates "chaos", meaning the variety of result classes present in a node.
 Information gain grows with falling entropy.
 A high gini index implies multiple input classes.
-The gini index calculates the probability that a random item of a node would be missclassified.
+The gini index calculates the probability that a random item of a node would be misclassified.
 A "pure" node has an entropy and a gini index of 0.
 An equal distribution of the result classes calculates the worst entropy.
 Most commonly, entropy is calculated using the logarithm to base 2.

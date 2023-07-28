@@ -84,8 +84,8 @@ function prepareConfig() {
 }
 
 $('#build').click(function () {
-    document.getElementById('eyeButton').style.visibility = "visible";
-    document.getElementById("splitOptions").innerText = "Choose a Feature for the Split";
+    //document.getElementById('eyeButton').style.visibility = "visible";
+    //document.getElementById("splitOptions").innerText = "Choose a Feature for the Split";
     if(document.getElementById('data').innerText === "") {
         alert("Please import data.")
         return;
@@ -615,10 +615,12 @@ $(document).ready(function() {
         var rowsNotSelected = table.getElementsByTagName('tr');
         for (var row = 0; row < rowsNotSelected.length; row++) {
             rowsNotSelected[row].style.fontWeight = "normal";
+            //rowSelected.style.fontStyle.color = "#000000";
             rowsNotSelected[row].classList.remove('selected');
         }
         var rowSelected = table.getElementsByTagName('tr')[rowId];
-        rowSelected.style.fontWeight = "500";       //bold
+        rowSelected.style.fontWeight = "bold";       //bold
+        //rowSelected.style.fontStyle.color = "#FFFFFF";
         rowSelected.className += " selected";
     }
 

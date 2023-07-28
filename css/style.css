@@ -30,13 +30,19 @@ main {
     height: 2.5rem;            /* Footer height */
 }
 
+#top_nav {
+    background-color: #939BA2;
+    color: #fff;
+}
+
 #displayData {
     position: absolute;
     z-index: 9;
-    background-color: #f1f1f1;
+    background-color: #F8F9FA;
     text-align: center;
-    border: 1px solid #d3d3d3;
+    border: 1px solid #F8F9FA;
     left: 375px;
+    top: 62.3px;
     resize: both;
     overflow: auto;
     padding: 5px;
@@ -45,12 +51,12 @@ main {
 #displayTestData {
     position: absolute;
     z-index: 9;
-    background-color: #f1f1f1;
+    background-color: #F8F9FA;
     text-align: center;
-    border: 1px solid #d3d3d3;
+    border: 1px solid #F8F9FA;
     /*
     top: 6.2%;*/
-    top: 60px;
+    top: 62.3px;
     left: 1150px;
     resize: both;
     overflow: auto;
@@ -59,18 +65,18 @@ main {
 
 #displayDataHeader {
     padding: 5px;
-    cursor: move;
+    cursor: grab;
     z-index: 10;
-    background-color: #939BA2;
+    background-color: #ADD8E6;
     color: #fff;
     width: 100%;
 }
 
 #displayTestDataHeader {
     padding: 5px;
-    cursor: move;
+    cursor: grab;
     z-index: 10;
-    background-color: #939BA2;
+    background-color: #ADD8E6;
     color: #fff;
     width: 100%;
 }
@@ -82,9 +88,9 @@ main {
     text-align: center;
     border: 1px solid #d3d3d3;
     left: 25%;
-    top: 70%;
+    top: 60%;
     padding-bottom: 15px;
-    cursor: move;
+    cursor: grab;
 }
 
 #col1 {

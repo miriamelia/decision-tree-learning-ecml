@@ -70,23 +70,23 @@
         <div class="list-group-item list-group-item-action bg-light">
           <div class="sidebar-heading">Tools</div>
           <div class="list-group-item-action bg-light py-2">
-            <button type="button" class="btn btn-secondary btn-block " id="build">build</button>
+            <button type="button" class="btn btn-outline-info btn-block " style="box-shadow: none !important; outline: none !important" id="build">build</button>
           </div>
           <div class="list-group-item-action bg-light py-2">
-            <button type="button" class="btn btn-secondary btn-block " id="reverseSplit">undo</button>
+            <button type="button" class="btn btn-outline-info btn-block " style="box-shadow: none !important; outline: none !important" id="reverseSplit">undo</button>
           </div>
           <div class="list-group-item-action bg-light py-2">
-            <button type="button" class="btn btn-secondary btn-block " id="redoSplit">redo</button>
+            <button type="button" class="btn btn-outline-info btn-block " style="box-shadow: none !important; outline: none !important" id="redoSplit">redo</button>
           </div>
           <div class="list-group-item-action bg-light py-2">
-            <button type="button" class="btn btn-secondary btn-block" id="clear">clear</button>
+            <button type="button" class="btn btn-outline-info btn-block" style="box-shadow: none !important; outline: none !important" id="clear">clear</button>
           </div>
         </div>
 
         <div class="list-group-item list-group-item-action bg-light">
           <div class="sidebar-heading">Analysis</div>
           <div class="list-group-item-action bg-light py-2">
-            <button type="button" class="btn btn-secondary btn-block " id="test">test data</button>
+            <button type="button" class="btn btn-outline-info btn-block " style="box-shadow: none !important; outline: none !important" id="test">test data</button>
           </div>
           <div class="list-group-item-action bg-light py-2">
             <table class="table table-bordered table-sm table-hover" id="results">
@@ -114,26 +114,24 @@
     <!-- Page Content -->
     <div class="overflow-auto" id="page-content-wrapper">
       <!-- Navbar remains horizontal -->
-      <nav class="bg-secondary navbar navbar-expand navbar-dark navbar-custom" id="top_nav" onclick = "removeClassSpecial();">  <!-- bg-dark -->
+      <nav class="bg-info navbar navbar-expand navbar-dark navbar-custom" id="top_nav" onclick = "removeClassSpecial();">  <!-- bg-dark -->
         <!-- Logo -->
         <a class="navbar-brand" href="#">
           <img src="./images/tree.png" alt="Logo" style="width:25px; margin-bottom:4px; ">
         </a>
         <a class="navbar-brand" href="#">Decision Tree Learning</a>
+        <!-- <a class="navbar-brand" target="_blank" href="https://www.uni-augsburg.de/en/fakultaet/fai/isse/">
+          <img src="./images/images_ISSE-logo.png" alt="Logo" style="width:65px;">
+        </a> -->
 
         <!-- Links in Navbar focused on right side-->
-        <ul class="bg-secondary  navbar-custom navbar-nav ml-auto">
-          <li class="bg-secondary nav-item">
-            <a class="navbar-brand" target="_blank" href="https://www.uni-augsburg.de/en/fakultaet/fai/isse/">
-              <img src="./images/images_ISSE-logo.png" alt="Logo" style="width:48px;">
-            </a>
-          </li>
-          <li class="bg-secondary nav-item">
-            <a class="btn btn-default bg-transparent shadow-none btn-block text-white-50 navbar-custom align-content-center" href="#" role="button" onclick="readTextFile(); $('.toast').toast('show'); " id="countClicks" style="border:none; outset; margin-top:3px">Hint</a>
+        <ul class="bg-info  navbar-custom navbar-nav ml-auto">
+          <li class="bg-info nav-item">
+            <a class="btn btn-default bg-transparent shadow-none btn-block text-white navbar-custom align-content-center" href="#" role="button" onclick="readTextFile(); $('.toast').toast('show'); " id="countClicks" style="border:none; margin-top:3px">Hint</a> <!-- outset; -->
             <!-- text-white-50 -->
           </li>
-          <li class="bg-secondary nav-item dropdown navbar-custom">
-            <a class="nav-link dropdown-toggle text-white-50" href="#" id="navbardrop" data-toggle="dropdown">Data</a>
+          <li class="bg-info nav-item dropdown navbar-custom">
+            <a class="nav-link dropdown-toggle text-white" href="#" id="navbardrop" data-toggle="dropdown">Data</a>
             <div class="dropdown-menu">
               <a href="#" class="dropdown-item" id="importFileCSV" onclick="document.getElementById('csvFile').click();">Import Training Data</a>
               <form enctype="multipart/form-data" method="post">
@@ -159,10 +157,10 @@
             </div>
           </li>
 
-          <li class="bg-secondary nav-item navbar-custom">
-            <a class="nav-link text-white-50" href="#" data-toggle="modal" data-target="#aboutInfoBox">About</a>
+          <li class="bg-info nav-item navbar-custom">
+            <a class="nav-link text-white" href="#" data-toggle="modal" data-target="#aboutInfoBox">About</a>
           </li>
-          <li class="bg-secondary nav-item">
+          <li class="bg-transparent nav-item">
             <button class="bg-transparent btn btn-default shadow-none navbar-custom" id="menu-toggle" style="border:none;"> <span class="navbar-toggler-icon"></span></button> <!-- btn-primary btn-dark -->
           </li>
         </ul>
@@ -201,8 +199,8 @@
       <div class="container-fluid">
         <div class="row h-100" id="row" >
           <!-- First Column contains hint toast message and displays detailed information about a node -->
-           <div class="col-md-auto d-flex flex-column" id="col1" style=" background-color: #F8F9FA">
-            <div id="toast" role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="false"  style="top:5%; left: 5%; bottom: 5%;">
+           <div class="col-md-auto d-flex flex-column" id="col1" style=" background-color: #F8F9FA; min-height: 930px;">
+            <div id="toast" role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="false"  style="top:20%; left: 5%; bottom: 5%;">
               <div class="toast-header" id="toastHeader">
                 <img src="./images/tree.png" alt="Logo" style="width:20px;">
                 <strong class="ml-1 mr-auto">Hint</strong>
@@ -220,11 +218,11 @@
                 <br>
                 <div id="node">
                   <canvas id="pieDiagram" width="300" height="300"> </canvas>
-                  <h5 id="splitOptions"></h5>
+                  <h5 id="splitOptions">Choose a Feature for the Split</h5>
                   <br>
                   <table width="300">
                     <tr class="w-100">
-                      <td class="w-100"><ul  class="list-group w-100" ><button class="d-flex justify-content-center list-group-item list-group-item-action btn btn-secondary btn-block" onclick="hideOrShow()" id="eyeButton" style="visibility: hidden">
+                      <td class="w-100"><ul  class="list-group w-100" ><button class="d-flex justify-content-center list-group-item list-group-item-action btn btn-secondary btn-block" onclick="hideOrShow()" id="eyeButton" > <!--  style="visibility: hidden" -->
                         <span id="eye" class="  fa fa-fw fa-eye field_icon toggle-password" ></span></button></ul></td>
                     </tr>
                   </table>
@@ -252,7 +250,7 @@
             <div class="order-2 mx-auto tree justify-content-center special" id="displayTree"></div>
 
           <!-- Third column displays the data -->
-          <div id="displayData" class="d-flex flex-column-reverse overflow-auto">
+          <div id="displayData" class="d-flex flex-column-reverse overflow-auto" >
             <div id="displayDataHeader" class="d-flex order-1 mx-auto justify-content-center">Training Data</div>
               <div class="table-responsive " id="tableData" style="width:100%;">
                 <table class="table-striped table-fixed" id="data" style="width:100%;"></table>
@@ -260,7 +258,7 @@
           </div>
         </div>
 
-          <div id="displayTestData" class="d-flex flex-column-reverse overflow-auto" style="margin-top: -3px;">
+          <div id="displayTestData" class="d-flex flex-column-reverse overflow-auto" >
           <div id="displayTestDataHeader" class="d-flex order-1 mx-auto justify-content-center">Test Data</div>
           <div class="table-responsive " id="tableDataTest" style="width:100%;">
             <table class="table-striped table-fixed" id="testData" style="width:100%;"></table>
@@ -306,6 +304,8 @@
 
 <script>
   $("#menu-toggle").click(function(e) {
+    e.style = "none !important;";
+    e.style.outline = "none !important;";
     e.preventDefault();
     $("#sidebar-wrapper").toggle();
   });
@@ -359,6 +359,7 @@
       if ($(this).is(':checked')) {
         $('#reverseSplit').prop('disabled', false);
         $('#redoSplit').prop('disabled', false);
+        document.getElementById("displayTree").style.left = "50%"
       } else {
         document.getElementById("splitOptions").innerText = "";
         $('#reverseSplit').prop('disabled', true);
@@ -388,8 +389,8 @@
               $('#stepwise').prop('checked', false);
               $('#reverseSplit').prop('disabled', true);
               $('#redoSplit').prop('disabled', true);
-              document.getElementById("splitOptions").innerText = "";
-              document.getElementById('eyeButton').style.visibility = "hidden";
+              //document.getElementById("splitOptions").innerText = "";
+              //document.getElementById('eyeButton').style.visibility = "hidden";
           }
         if(!$(this).is(':checked') && !$('#manually').is(':checked') && !$('#stepwise').is(':checked')) {
           $('#automatically').prop('checked', true);
@@ -402,8 +403,8 @@
         $('#automatically').prop('checked', false);
         $('#reverseSplit').prop('disabled', true);
         $('#redoSplit').prop('disabled', true);
-        document.getElementById("splitOptions").innerText = "";
-        document.getElementById('eyeButton').style.visibility = "hidden";
+        //document.getElementById("splitOptions").innerText = "";
+        //document.getElementById('eyeButton').style.visibility = "hidden";
       }
       if(!$(this).is(':checked') && !$('#manually').is(':checked')) {
         $('#automatically').prop('checked', true);
@@ -503,6 +504,7 @@
   $("#csvFile").change(function(){
     if(importData("csvFile", "data", "")) {
       emptyAll();
+      document.getElementById('displayData').style.visibility = "visible";
     }
   });
 
@@ -511,6 +513,7 @@
   $("#csvFileTest").change(function(){
     if(importData("csvFileTest", "testData", "test")) {
       emptyData("testData")
+      document.getElementById('displayTestData').style.visibility = "visible";
     }
   });
 
@@ -518,6 +521,8 @@
   $("#loadSession").change(function(){
     emptyAll();
     loadFileAsText();
+    document.getElementById('displayData').style.visibility = "visible";
+    document.getElementById('displayTestData').style.visibility = "visible";
   });
 
   /* choose file according to checkbox: both files need same length; loops through textfile and displays line of click count.
