@@ -162,17 +162,23 @@ $('#test').click(function () {
         }
     }
     // set analysis values; calculate accuracy
-    var accuracy = output.Accuracy;
-    var f1Score = output.F1Score;
-    var recall = output.Recall;
-    var precision = outpu.Precision;
+    var accuracy = output.Accuracy * 100;
+    var f1Score = output.F1Score * 100;
+    var recall = output.Recall * 100;
+    var precision = output.Precision * 100;
     var tp = output.TP;
     var tn = output.TN;
     var fp = output.FP;
     var fn = output.FN;
+    document.getElementById("true_positives").innerText = "TP: " + tp.toString();
+    document.getElementById("false_negatives").innerText = "FN: " + fn.toString();
+    document.getElementById("false_positives").innerText = "FP: " + fp.toString();
+    document.getElementById("true_negatives").innerText = "TN: " + tn.toString();
+
     document.getElementById("accuracy").innerText = accuracy.toFixed(4).toString()+"%";
-    document.getElementById("correct").innerText = correct.toString();
-    document.getElementById("incorrect").innerText = incorrect.toString();
+    document.getElementById("f1_score").innerText = f1Score.toFixed(4).toString()+"%";
+    document.getElementById("recall").innerText = recall.toFixed(4).toString()+"%";
+    document.getElementById("precision").innerText = precision.toFixed(4).toString()+"%";
 });
 
 function unescapeHTML(escapedHTML) {

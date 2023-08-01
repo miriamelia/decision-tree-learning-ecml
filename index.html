@@ -84,9 +84,22 @@
         </div>
 
         <div class="list-group-item list-group-item-action bg-light">
-          <div class="sidebar-heading">Analysis</div>
+          <div class="sidebar-heading">Evaluation</div>
           <div class="list-group-item-action bg-light py-2">
             <button type="button" class="btn btn-outline-info btn-block " style="box-shadow: none !important; outline: none !important" id="test">test data</button>
+          </div>
+          <div class="list-group-item-action bg-light py-2">
+            <table class="table table-bordered table-sm table-hover" id="confusion_matrix">
+              <tbody>
+              <tr>
+                <td id="true_positives" style="font-size: 14px">TP: </td>
+                <td id="false_negatives" style="font-size: 14px">FN: </td>
+              </tr>
+              <tr>
+                <td id="false_positives" style="font-size: 14px">FP: </td>
+                <td style="font-size: 14px" id="true_negatives">TN: </td>
+              </tr>
+            </table>
           </div>
           <div class="list-group-item-action bg-light py-2">
             <table class="table table-bordered table-sm table-hover" id="results">
@@ -96,15 +109,20 @@
                 <td id="accuracy" style="font-size: 14px"> </td>
               </tr>
               <tr>
-                <td style="font-size: 14px">Correct</td>
-                <td style="font-size: 14px" id="correct"> </td>
+                <td style="font-size: 14px">F1-Score</td>
+                <td style="font-size: 14px" id="f1_score"> </td>
               </tr>
               <tr>
-                <td style="font-size: 14px">Incorrect</td>
-                <td style="font-size: 14px" id="incorrect"> </td>
+                <td style="font-size: 14px">Recall</td>
+                <td style="font-size: 14px" id="recall"> </td>
+              </tr>
+              <tr>
+                <td style="font-size: 14px">Precision</td>
+                <td style="font-size: 14px" id="precision"> </td>
               </tr>
             </table>
           </div>
+
         </div>
       </div>
 
@@ -200,7 +218,7 @@
       <div class="container-fluid">
         <div class="row h-100" id="row" >
           <!-- First Column contains hint toast message and displays detailed information about a node -->
-           <div class="col-md-auto d-flex flex-column" id="col1" style=" background-color: #F8F9FA; min-height: 930px;">
+           <div class="col-md-auto d-flex flex-column" id="col1" style=" background-color: #F8F9FA; min-height: 1130px;">
             <div id="toast" role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="false"  style="top:20%; left: 5%; bottom: 5%;">
               <div class="toast-header" id="toastHeader">
                 <img src="./images/tree.png" alt="Logo" style="width:20px;">
@@ -459,9 +477,14 @@
       document.getElementById('nodeContent').innerHTML = ""
       document.getElementById("nodeContent2").innerHTML = ""
       document.getElementById("displayTree").innerHTML = ""
+      document.getElementById("true_positives").innerText = "TP: ";
+      document.getElementById("false_positives").innerText = "FP: ";
+      document.getElementById("false_negatives").innerText = "FN: ";
+      document.getElementById("true_negatives").innerText = "TN: ";
       document.getElementById("accuracy").innerText = "";
-      document.getElementById("correct").innerText = "";
-      document.getElementById("incorrect").innerText = "";
+      document.getElementById("f1_score").innerText = "";
+      document.getElementById("recall").innerText = "";
+      document.getElementById("precision").innerText = "";
       $('#pieDiagram').remove();
       $('#node').prepend('<canvas id="pieDiagram"><canvas>');
       allIds = [];
@@ -490,9 +513,14 @@
     document.getElementById("displayTree").innerHTML = "";
     $('#pieDiagram').remove();
     $('#node').prepend('<canvas id="pieDiagram"><canvas>');
+    document.getElementById("true_positives").innerText = "TP: ";
+    document.getElementById("false_positives").innerText = "FP: ";
+    document.getElementById("false_negatives").innerText = "FN: ";
+    document.getElementById("true_negatives").innerText = "TN: ";
     document.getElementById("accuracy").innerText = "";
-    document.getElementById("correct").innerText = "";
-    document.getElementById("incorrect").innerText = "";
+    document.getElementById("f1_score").innerText = "";
+    document.getElementById("recall").innerText = "";
+    document.getElementById("precision").innerText = "";
   }
 
   function emptyData(tableId) {

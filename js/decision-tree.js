@@ -183,9 +183,9 @@ var dt = (function () {
             // so we have to terminate process of building tree
             resultCollection.push(id+", "+calc+"of current node: 0.0000");
             if(calc === "Entropy ") {
-                resultCollection.push(id+", Information Gain: <br>");
+                resultCollection.push(id+", Information Gain:");    // <br>
             } else {
-                resultCollection.push(id+", Gini Gain: <br>");
+                resultCollection.push(id+", Gini Gain:");   // <br>
             }
             resultCollection.push(id+", "+" A pure node is optimal ")
 
