@@ -176,7 +176,7 @@ $('#test').click(function () {
 });
 
 function unescapeHTML(escapedHTML) {
-    return escapedHTML.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&'); //.replace(/\u2265/, '>=')
+    return escapedHTML.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
 }
 
 // append column to test data table
