@@ -3,6 +3,107 @@ var resultWay = ["start"];
 var numeric = false;
 var mixed = false;
 
+ /**
+     * Returns number of category attributes
+     *
+     * @param items
+     * @param attr
+     */
+ function countUniqueValues(items, attr) {
+    var counter = {};
+    for (var i = items.length - 1; i >= 0; i--) {
+        counter[items[i][attr]] = 0;
+    }
+    for (var i = items.length - 1; i >= 0; i--) {
+        counter[items[i][attr]] += 1;
+    }
+    return counter;
+}
+
+
+/**
+     * Compares Prediction with output
+     *
+     * @param groundTruth
+     * @param predictions
+     */
+function calculateEvaluation(groundTruth, predictions) {
+    if (groundTruth.length !== predictions.length) {
+      throw new Error('Ground truth and predictions arrays must have the same length.');
+    }
+  
+    const uniqueLabels = new Set([...groundTruth, ...predictions]);
+    const sortedLabels = Array.from(uniqueLabels).sort();
+    
+    // Initialize counters
+    let tp = 0;
+    let tn = 0;
+    let fp = 0;
+    let fn = 0;
+
+    console.log(predictions)
+  
+    if (uniqueLabels.size === 2) {
+      // Binary classification > assignment of true vs negative class > Always last item in set (ordered list) is positive class! 
+      for (let i = 0; i < groundTruth.length; i++) {
+        if (predictions[i].trim().length === 0) { // count none = '' as false negative
+            fn++;
+        }
+        else if (groundTruth[i] === predictions[i]) {
+          if (groundTruth[i] === sortedLabels[1]) {
+            tp++;
+          } else {
+            tn++;
+          }
+        } else {
+          if (groundTruth[i] === sortedLabels[1]) {
+            fn++;
+          } else {
+            fp++;
+          }
+        }
+      }
+    } else {
+        // Multi-class classification then micro-averaging sum over all counts and then calc metric
+        for (let i = 0; i < uniqueLabels.size; i++) {
+            for (let j = 0; j < groundTruth.length; j++) {
+                if (predictions[j].trim().length === 0) { // count none = '' as false negative
+                    fn++;
+                } 
+                else if (groundTruth[j] === predictions[j]) {
+                    if (groundTruth[j] === sortedLabels[i]) {
+                        tp++;
+                    } else {
+                        tn++;
+                    }
+                } else {
+                    if (groundTruth[j] === sortedLabels[i]) { 
+                        fn++;
+                    } else {
+                        fp++;
+                    }
+                }
+            }
+        }
+    }
+    // Calculate metrics
+    const precision = tp / (tp + fp);
+    const recall = tp / (tp + fn);
+    const accuracy = (tp + tn) / (tp + tn + fp + fn)
+    const f1Score = (2 * precision * recall) / (precision + recall);
+
+    return {
+        TP: tp,
+        TN: tn,
+        FP: fp,
+        FN: fn,
+        Accuracy: accuracy,
+        Precision: precision,
+        Recall: recall,
+        F1Score: f1Score,
+    };
+}
+
 /*
     check first row of imported files to contain the same attributes
     mark correctly classifies items green; wrongly classified ones red
@@ -29,76 +130,46 @@ $('#test').click(function () {
         } else {
             var coll = document.getElementById("displayTree").innerText;
             var tree = coll.split("\n");
-            var hasSameValues = testTreeForSameValues();
+            //var hasSameValues = testTreeForSameValues();
+            var outcome_pred = []
+            var outcome_groundtruth = []
             if(checkTree(tree)) {
                 var check = createTreeBranches();
-                console.log(check)
                 for(var i = 1; i < table.rows.length; i++) {
                     var row = document.getElementById("rowtest"+i.toString());
                     var line = row.innerText.replace(/\s/g, ' ').split(" ");
-                    //if(!numeric) {  //
-                        if (testData(check, line, row.innerText, tree, i, headings)) {
-                            row.style.backgroundColor = "#D4EFDF";
-                            correct++;
-                        } else {
-                            row.style.backgroundColor = "#F2D7D5";
-                            incorrect++;
-                        }
-                    /*} else {        // numerical values
-                        if (checkItem(row.innerText, tree)) {
-                            row.style.backgroundColor = "#D4EFDF";
-                            correct++;
-                        } else {
-                            row.style.backgroundColor = "#F2D7D5";
-                            incorrect++;
-                        }
-                    }*/
+                    results = testData(check, line, row.innerText, tree, i, headings)
+                    prediction = results.prediction;
+                    outcome_groundtruth.push(results.groundtruth);
+                    outcome_pred.push(results.prediction_value);
+                    if (prediction) {
+                        row.style.backgroundColor = "#D4EFDF";
+                        correct++;
+                    } else {
+                        row.style.backgroundColor = "#F2D7D5";
+                        incorrect++;
+                    }
                 }
                 for(let i = 0; i < table.rows.length; i++){     // if last one undefined not counted in length
                     if(resultvalues[i] === undefined)
                         resultvalues[i] = "none";
                 }
+                output = calculateEvaluation(outcome_groundtruth, outcome_pred)
                 appendColumn(resultvalues);
-                // prepare array with numeric values to properly display paths
-                console.log(resultWay)
-               /* if(numeric) {
-                    var next = [];
-                    var pos = 0;
-                    for(var i = 1; i < resultWay.length; i++) {
-                        var value = resultWay[i.toString()];
-                        if(next.length > 0) {
-                            if(value.length > 1 && !equalsCategoryAttribute(next[next.length-1])) {     // check maybe wrong from before
-                                next[next.length-1] = "none";
-                                resultWay.splice(pos, 1, next);
-                                next = [];
-                                continue;
-                            }
-                        }
-                        if(value.length === 1) {
-                            pos = i;
-                            next.push(value.toString())
-                            if (equalsCategoryAttribute(value)) {
-                                resultWay.splice(pos, 1, next);
-                                next = [];
-                            }
-                        }
-                    }
-                    for(var i = 1; i < resultWay.length; i++) {
-                        var value = resultWay[i.toString()];
-                        if(value.length === 1) {
-                            resultWay.splice(i, 1)
-                            --i;
-                        }
-                    }
-                }*/
-                console.log(resultWay)
             } else {
                 alert("Please finish training the tree before testing data.");
             }
         }
     }
     // set analysis values; calculate accuracy
-    var accuracy = (correct / (correct+incorrect))*100;
+    var accuracy = output.Accuracy;
+    var f1Score = output.F1Score;
+    var recall = output.Recall;
+    var precision = outpu.Precision;
+    var tp = output.TP;
+    var tn = output.TN;
+    var fp = output.FP;
+    var fn = output.FN;
     document.getElementById("accuracy").innerText = accuracy.toFixed(4).toString()+"%";
     document.getElementById("correct").innerText = correct.toString();
     document.getElementById("incorrect").innerText = incorrect.toString();
@@ -119,13 +190,8 @@ function appendColumn(content) {
 
 // create DIV element and append to the table cell
 function createCell(cell, text, style, i) {
-    //cell.style.padding = '0 2px';
     if (i === 0) {
         // make first row bold
-        /* cell.style.background = '#FFF';
-        cell.style.position = 'sticky';
-        cell.style.top = '0';
-        cell.id ='firstRow';*/
         cell.style.background = '#F6F7F8';
         cell.innerHTML = '<td id="firstRow"><button type="button" class="btn btn-light font-weight-bolder" style="box-shadow: none" disabled>' +text+ '</button></td>';
     }  else if (i === 1) {
@@ -167,7 +233,10 @@ function testData(check, line, row, tree, rownumber, headings) {              //
     var way = [];
     var attrName = [];
     var val = [];
+    let prediction_value = "";
+    let ground_truth = "";
     for(let i = 0; i < check.length; i++) {     // iterating through all tree branches
+        //console.log(check[i])
         val = check[i].split(",");
         for(var j = 0; j < val.length; j++) {
             var help = j;
@@ -181,10 +250,11 @@ function testData(check, line, row, tree, rownumber, headings) {              //
                 var tmp = val[help].trim();
                 tmp = tmp.replace("<", "");
                 tmp = tmp.replace("\u2265", "");
-                if(headings.indexOf(way[way.length-1]) > -1 && !(parseInt(tmp))) {
+                if(headings.indexOf(way[way.length-1]) > -1 && !(Number(tmp))) {
                     way.push(line[pos].trim());                     // value of attribute
+                    console.log("attribute")
                 }
-                if(parseInt(tmp) || tmp === 0) {
+                if(Number(tmp) || tmp === 0) {
                     //console.log(check[i])
                     var value = "";
                     //console.log(line[pos].trim())       // Zahlen werte
@@ -193,15 +263,17 @@ function testData(check, line, row, tree, rownumber, headings) {              //
                         way.push(val[j].trim());                        // attribute Name
                         attrName.push(val[j].trim());
                     }
-                    if (parseInt(tmp, 10) <= parseInt(line[pos].trim(), 10)) {
-                        value = "\u2265" + tmp
+                    if (Number(tmp) <= Number(line[pos].trim())) {
+                        value = "\u2265" + tmp;
                     } else {
-                        value = "<" + tmp
+                        value = "<" + tmp;
                     }
+                    //console.log("value after numeric comp")
+                    //console.log(value)
                     if(way.indexOf(value) === -1)
                         way.push(value);
                     else
-                        way.pop();
+                        way.pop(); // why?
                     if(value !== val[help].trim())
                         break;
                 } else if(line[pos].trim() !== val[help].trim()) {
@@ -211,36 +283,41 @@ function testData(check, line, row, tree, rownumber, headings) {              //
                         resultvalues[rownumber] = "none";
                         if((way.indexOf("none") === -1))
                             way.push("none")
-                    } /*else if(equalsCategoryAttribute(val[help].trim())) {
-                        console.log(val[help].trim())
-                        resultvalues[rownumber] = val[help].trim();
-                        if((way.indexOf(val[help].trim()) === -1))
-                            way.push(val[help].trim())
-                    }*/
+                    }
                     break;
                 }
             } else if(j === (val.length-1)) {
-                //if((way.indexOf(val[j].trim()) === -1))
-                  //  way.push(val[j].trim());
-                //
+                //console.log("next block check attr?")
                 if(equalsCategoryAttribute(val[j].trim()) && !equalsCategoryAttribute(way[way.length-1])) {    // add value found by following the tree from root to leaf
                     resultvalues[rownumber] = val[j].trim();
                     if((way.indexOf(val[j].trim()) === -1))
                         way.push(val[j].trim())
                 }
-                if(line[line.length-1].trim() === val[j].trim()) {          // check if that value equals the value of the test data set
-                   // resultvalues.push(val[j].trim())
-                   // resultvalues[rownumber] = val[j].trim();
-                    if((way.indexOf(val[j].trim()) === -1))
-                        way.push(val[j].trim());
-                    resultWay[rownumber] = way;
-                    return true;
+                ground_truth = line[line.length-1].trim();
+                if(val[j] === undefined)
+                    prediction_value = "none"
+                else {
+                    prediction_value = val[j].trim();
+                    if(ground_truth === prediction_value) {          // check if that value equals the value of the test data set
+                        if((way.indexOf(val[j].trim()) === -1))
+                            way.push(val[j].trim());
+                        resultWay[rownumber] = way;
+                        return {
+                            prediction: true,
+                            groundtruth: line[line.length-1].trim(),
+                            prediction_value: val[j].trim(),
+                        };
+                    }
                 }
             }
         }
     }
     resultWay[rownumber] = way;
-    return false;
+    return {
+        prediction: false,
+        groundtruth: ground_truth,
+        prediction_value: prediction_value,
+    };
 }
 
 /**
@@ -259,6 +336,19 @@ function containsValue(value, check) {
     return value;
 }
 
+function countDuplicates(arr) {
+    const uniqueItems = new Set();
+    const duplicates = new Set();
+    arr.forEach((item) => {
+      if (uniqueItems.has(item)) {
+        duplicates.add(item);
+      } else {
+        uniqueItems.add(item);
+      }
+    });
+    return  Array.from(duplicates)
+  }
+
 function createTreeBranches() {
     var result = [];
     var input = document.getElementById("displayTree").innerHTML;
@@ -271,6 +361,7 @@ function createTreeBranches() {
         input[i] = input[i].replace(/(<([^>]+)>)/ig," ");
         input[i] = unescapeHTML(input[i]);
     }
+    duplicates_input = countDuplicates(input)
     for(var i = 0; i < input.length; i++) {
         var start = input[0];
         start = start.split("   ");
@@ -294,24 +385,17 @@ function createTreeBranches() {
                     var tmp = help[0].trim()
                     tmp = tmp.replace("<", "")
                     tmp = tmp.replace("\u2265", "")
-                    if(parseInt(tmp) || tmp === 0) {
-                        if(!mixed)
-                            numeric = true;
+                    if(Number(tmp) || tmp === 0) {
                         var bridge = result[result.length-1].split(" ").join("").split(",")
                         var ind1 = bridge.indexOf("<"+tmp)
                         var ind2 = bridge.indexOf("\u2265"+tmp)
                         test2 = ind1 > ind2 ? ind1 : ind2;
-                        if(values.indexOf(tmp.toString()) > -1) {
-                            content = result[result.length-1].split(",").slice(0, test2); // ++test2
-                            content.push(help);
-                            result.push(content.join());
-                            k = -1;
-                        }
-                    } else if(values.indexOf(help[0].trim()) > -1) {
-                        if(numeric) {
-                            mixed = true;
-                            numeric = false;
-                        }
+                        content = result[result.length-1].split(",").slice(0, test2);
+                        content.push(help);
+                        result.push(content.join());
+                        k = -1;
+                    }
+                    if(values.indexOf(help[0].trim()) > -1) {
                         content = result[result.length-1].split(",").slice(0, ++test2);
                         content.push(help);
                         result.push(content.join());
@@ -321,8 +405,51 @@ function createTreeBranches() {
             }
         }
     }
+    // Handle Duplicates
+    duplicates = countDuplicates(result);
+    if (duplicates.length > 0) {
+        idx = 0
+        for(var i = 0; i < duplicates.length; i++) {
+            //console.log(duplicates[i]);
+            idx = result.lastIndexOf(duplicates[i])
+            // count occurrence of Duplicate
+            let count = countOccurrences(duplicates, duplicates[i])
+            //console.log(count);
+            var curr = duplicates[i].split(",");
+            // remove last elements since first relevant element is first attribute
+            curr.pop()
+            curr.pop()
+            //console.log(curr);
+            // modify duplicate from end of array and jump over values until count of particular duplicates is eliminated
+            for(var k = curr.length-1; k >= 0; k--) {
+                //console.log(count)
+                if (count > 0) { // check count of particular duplicate
+                    if(equalsAttribute(curr[k].trim())) { 
+                        //console.log(duplicates_input[i].trim().split("  "))
+                        curr[k] = duplicates_input[i]
+                        //console.log(curr[k])
+                    } else {
+                        curr.splice(k, 1); // 2nd parameter means remove one item only
+                        count = count - 1 // only then duplicate treatment completed
+                    }   
+                } else break;
+            }
+            duplicates[i] = curr.flatMap((str) => str.split(/\s+/)).filter(word => word !== '');
+            result[idx] = duplicates[i].toString();
+        }
+    }
     return result;
 }
+
+function countOccurrences(arr, searchValue) {
+    let count = 0;
+    for (const value of arr) {
+      if (value === searchValue) {
+        count++;
+      }
+    }
+    return count;
+  }
 
 function testTreeForSameValues() {
     var rows = document.getElementById("data").innerText.split("\n");
@@ -375,9 +502,9 @@ function checkItem(row, tree) {
     way.push(tree[0])
     if(pos > -1) {
         value = items[pos];
-        if(parseInt(value, 10) || value === "0") {
+        if(Number(value) || value === "0") {
             var comp = findNumberInArray(tree, tree[0]);
-            if (parseInt(comp, 10) <= parseInt(value, 10)) {
+            if (Number(comp) <= Number(value)) {
                 value = "\u2265" + comp
             } else {
                 value = "<" + comp
