@@ -175,10 +175,10 @@ $('#test').click(function () {
     document.getElementById("false_positives").innerText = "FP: " + fp.toString();
     document.getElementById("true_negatives").innerText = "TN: " + tn.toString();
 
-    document.getElementById("accuracy").innerText = accuracy.toFixed(4).toString()+"%";
-    document.getElementById("f1_score").innerText = f1Score.toFixed(4).toString()+"%";
-    document.getElementById("recall").innerText = recall.toFixed(4).toString()+"%";
-    document.getElementById("precision").innerText = precision.toFixed(4).toString()+"%";
+    document.getElementById("accuracy").innerText = accuracy.toFixed(4).toString()+" %";
+    document.getElementById("f1_score").innerText = f1Score.toFixed(4).toString()+" %";
+    document.getElementById("recall").innerText = recall.toFixed(4).toString()+" %";
+    document.getElementById("precision").innerText = precision.toFixed(4).toString()+" %";
 });
 
 function unescapeHTML(escapedHTML) {
