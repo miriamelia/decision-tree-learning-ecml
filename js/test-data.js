@@ -241,10 +241,11 @@ function testData(check, line, row, tree, rownumber, headings) {              //
     var val = [];
     let prediction_value = "";
     let ground_truth = "";
+    //console.log(check)
     for(let i = 0; i < check.length; i++) {     // iterating through all tree branches
         //console.log(check[i])
         val = check[i].split(",");
-        for(var j = 0; j < val.length; j++) {
+        for(var j = 0; j < val.length; j++) {   // iterate through items in tree branch
             var help = j;
             ++help;
             var pos = findPosition(val[j].trim());          // finds position of attribute in data if value is attribute name
@@ -258,8 +259,11 @@ function testData(check, line, row, tree, rownumber, headings) {              //
                 tmp = tmp.replace("\u2265", "");
                 if(headings.indexOf(way[way.length-1]) > -1 && !(Number(tmp))) {
                     way.push(line[pos].trim());                     // value of attribute
-                    console.log("attribute")
+                    //console.log("attribute")
+                    //console.log(line[pos].trim())
                 }
+                //console.log(tmp)
+                //console.log(line) // > Testdata
                 if(Number(tmp) || tmp === 0) {
                     //console.log(check[i])
                     var value = "";
@@ -292,8 +296,9 @@ function testData(check, line, row, tree, rownumber, headings) {              //
                     }
                     break;
                 }
-            } else if(j === (val.length-1)) {
+            } else if(j === (val.length-1)) {   // check case prediction value = last item in array
                 //console.log("next block check attr?")
+                //console.log(val[j].trim())
                 if(equalsCategoryAttribute(val[j].trim()) && !equalsCategoryAttribute(way[way.length-1])) {    // add value found by following the tree from root to leaf
                     resultvalues[rownumber] = val[j].trim();
                     if((way.indexOf(val[j].trim()) === -1))
@@ -308,6 +313,8 @@ function testData(check, line, row, tree, rownumber, headings) {              //
                         if((way.indexOf(val[j].trim()) === -1))
                             way.push(val[j].trim());
                         resultWay[rownumber] = way;
+                        //console.log(val[j].trim())
+                        //console.log(resultWay)
                         return {
                             prediction: true,
                             groundtruth: line[line.length-1].trim(),
@@ -319,6 +326,7 @@ function testData(check, line, row, tree, rownumber, headings) {              //
         }
     }
     resultWay[rownumber] = way;
+    //console.log(resultWay)
     return {
         prediction: false,
         groundtruth: ground_truth,
@@ -357,6 +365,8 @@ function countDuplicates(arr) {
 
 function createTreeBranches() {
     var result = [];
+    var len_per_attr = [];
+    //var values = [];
     var input = document.getElementById("displayTree").innerHTML;
     input = input.toString().split("</ul>");
     for(var i = 0; i < input.length; i++) {
@@ -376,7 +386,7 @@ function createTreeBranches() {
         if(start[0] === "")
             start.shift();
         if(i === 0) {
-            result.push(start.join());
+            result.push(start.join());   // first attribute-name
         } else {
             var help = input[i].split("   ");
             if(help[help.length-1] === "")
@@ -384,13 +394,16 @@ function createTreeBranches() {
             var last = result[result.length-1].split(",");
             for(var k = last.length-1; k >= 0; k--) {
                 var test2 = k;
-                var values = [];
                 var content;
+                var values = [];
                 if(equalsAttribute(last[k].trim())) {
-                    values = getValuesOfAttribute(last[k].trim());
-                    var tmp = help[0].trim()
-                    tmp = tmp.replace("<", "")
-                    tmp = tmp.replace("\u2265", "")
+                    //var arr = 
+                    //values.concat(arr);  // returns all possible values of attribute-name
+                    values = getValuesOfAttribute(last[k].trim()); // TODO bug regarding duplicates of values for multiple attributes
+                    len_per_attr.push(values.length)
+                    var tmp = help[0].trim();
+                    tmp = tmp.replace("<", "");
+                    tmp = tmp.replace("\u2265", "");
                     if(Number(tmp) || tmp === 0) {
                         var bridge = result[result.length-1].split(" ").join("").split(",")
                         var ind1 = bridge.indexOf("<"+tmp)
@@ -411,29 +424,26 @@ function createTreeBranches() {
             }
         }
     }
+    //console.log(result)
+    //console.log(len_per_attr)
     // Handle Duplicates
     duplicates = countDuplicates(result);
+    console.log(duplicates);
     if (duplicates.length > 0) {
         idx = 0
         for(var i = 0; i < duplicates.length; i++) {
-            //console.log(duplicates[i]);
             idx = result.lastIndexOf(duplicates[i])
             // count occurrence of Duplicate
             let count = countOccurrences(duplicates, duplicates[i])
-            //console.log(count);
             var curr = duplicates[i].split(",");
             // remove last elements since first relevant element is first attribute
             curr.pop()
             curr.pop()
-            //console.log(curr);
             // modify duplicate from end of array and jump over values until count of particular duplicates is eliminated
             for(var k = curr.length-1; k >= 0; k--) {
-                //console.log(count)
                 if (count > 0) { // check count of particular duplicate
                     if(equalsAttribute(curr[k].trim())) { 
-                        //console.log(duplicates_input[i].trim().split("  "))
                         curr[k] = duplicates_input[i]
-                        //console.log(curr[k])
                     } else {
                         curr.splice(k, 1); // 2nd parameter means remove one item only
                         count = count - 1 // only then duplicate treatment completed
@@ -444,6 +454,7 @@ function createTreeBranches() {
             result[idx] = duplicates[i].toString();
         }
     }
+    //console.log(result)
     return result;
 }
 
