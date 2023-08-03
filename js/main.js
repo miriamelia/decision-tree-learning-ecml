@@ -56,7 +56,7 @@ function convertToNumber(input, headings) {
         var example = Object.values(obj)
         for(var attr in example) {
             if(!isNaN(example[attr])) {
-                obj[headings[attr]] = parseInt(example[attr])
+                obj[headings[attr]] = parseFloat(example[attr])
             }
         }
     }
@@ -214,7 +214,7 @@ function treeToHtml(tree) {
 function trees(tree) {
     var subtree = '';
     for(var z = 0; z < tree.trees.length; z++) {
-        if(parseInt(tree.value[z].split(">").join("")) || parseInt(tree.value[z].split(">=").join(""))) {
+        if(Number(tree.value[z].split(">").join("")) || Number(tree.value[z].split(">=").join(""))) {
             var name;
             var greaterThan = '\u2265'
             if(tree.value[z].includes(">=")) {
@@ -262,7 +262,7 @@ function setCurrSplit(idNode, text, value, redo) {
     // reset removed splits if new split is being made manually
     if(!redo)
         removedSplits = []
-    idNode = parseInt(idNode);
+    idNode = Number(idNode);
     ids.push(idNode);
     if (idNode <= ids[ids.length - 1]) {
         ids.sort(function (a, b) {
@@ -289,9 +289,9 @@ function setCurrSplit(idNode, text, value, redo) {
         var count = getValueCountUpdateIDs(idNode.toString(), text, headings)
         for (var k = ids.indexOf(idNode) + 1; k < ids.length; k++) {
             for (var l = 0; l < splits.length; l++) {
-                if (parseInt(splits[l]) === parseInt(ids[k]) && !(changed.includes(l))) {
+                if(parseFloat(splits[l]) === parseFloat(ids[k]) && !(changed.includes(l))) {
                     changed.push(l);
-                    var h = parseInt(splits[l]);
+                    var h = parseFloat(splits[l]).toFixed(1);   // keeps at least one 0 after comma
                     h += count;
                     splits[l] = h.toString();
                 }
@@ -325,9 +325,9 @@ function reverseLastSplit() {
     }
     var c;
     //value to be removed
-    var edit = parseInt(splits[splits.length-1]);
+    var edit = parseFloat(splits[splits.length-1]);
     for(var i = 0; i < splitAttributes.length; i++) {
-        if(parseInt(splitAttributes[i].splitId) === edit) {
+        if(parseFloat(splitAttributes[i].splitId) === edit) {
             //all other split nodes need to have smaller ids if not, it is not the last id so the other ids need to be adjusted
             if(ids[ids.length-1] > edit) {
                 var help = [...splitAttributes];
@@ -343,12 +343,12 @@ function reverseLastSplit() {
     }
     // updating ids if necessary
     for(var k = 0; k < ids.length; k++) {
-        if(parseInt(ids[k]) > edit) {
+        if(parseFloat(ids[k]) > edit) {
             var changed = []
             for(var m = 0; m < splits.length; m++) {
-                if(parseInt(splits[m]) === ids[k] && !(changed.includes(m))) {
+                if(parseFloat(splits[m]) === ids[k] && !(changed.includes(m))) {
                     changed.push(m)
-                    var h = parseInt(splits[m])
+                    var h = parseFloat(splits[m]).toFixed(1);
                     h   -= c;
                     splits[m] = h.toString()
                 }
@@ -357,7 +357,7 @@ function reverseLastSplit() {
         }
     }
     for(var j = 0; j < ids.length; j++) {
-        if(parseInt(ids[j]) === edit) {
+        if(parseFloat(ids[j]) === edit) {
             ids.splice(j ,1);
             break;
         }
@@ -404,7 +404,7 @@ function getValueCountUpdateIDs(spot, attr, headings) {
     for (var k = 0; k < content.length; k++) {
         values.push(content[k].split(",")[index + 1])
     }
-    if(parseInt(values[0])) {
+    if(Number(values[0])) {
         count = 2
     } else
         count = values.filter(unique).length;
@@ -439,11 +439,12 @@ function buildTree(splitAttributes) {
  * also mark corresponding rows in table
  */
 $(document).ready(function() {
-    var idNode = -1;
+    var idNode = 1; // -1
     var marked = false;
     //window.onload = highlight_row;
 
     $( "#displayTree" ).on( "click", "a", function( event ) {
+        // fill entropy and information gain values
         document.getElementById("nodeContent0").innerHTML = ""
         document.getElementById("nodeContent00").innerHTML = ""
         document.getElementById("nodeContent").innerHTML = ""
@@ -461,16 +462,16 @@ $(document).ready(function() {
         var rows = document.getElementById("data").innerText.split("\n");
         readCategoryValues(rows);
         for(var m = 0; m < rows.length; m++) {
-            document.getElementById("row"+m.toString()).style.backgroundColor = "";
+            document.getElementById("row"+m.toString()).style.backgroundColor = ""; // reset background color in table
         }
         if(pieChart)
             pieChart.destroy();
         document.getElementById("nodeContent").innerHTML = "";
         event.preventDefault();
-        document.getElementById("cardTitle").innerText = "Detailed Image of Data";
-        var spot = $(this).attr('id');
+        document.getElementById("cardTitle").innerText = "Detailed Image of Data"; // end restore default
+        var spot = $(this).attr('id'); // id of clicked node
         // set marker on click and remove marker on next click on same node
-        if(spot === idNode) {
+        if(String(spot) === String(idNode)) {
             var handler = document.getElementById(idNode);
             if(handler != null) {
                 if(marked === true) {
@@ -479,19 +480,19 @@ $(document).ready(function() {
                     handler.style.borderWidth = "1px";
                 } else {
                     marked = true;
-                    document.getElementById(spot).style.borderColor = "#939BA2";
+                    document.getElementById(spot).style.borderColor = "#939BA2";   // makes node border bold, when clicked
                     document.getElementById(spot).style.borderWidth = "2px";
                 }
             }
         } else {
             // mark clicked node
             marked = true;
-            document.getElementById(spot).style.borderColor = "#939BA2";
+            document.getElementById(spot).style.borderColor = "#939BA2";    // makes node border bold, when clicked
             document.getElementById(spot).style.borderWidth = "2px";
         }
         idNode = spot;
         var content = [];
-        var pie = [];
+        var pie = []; // contains all samples with id to respective node
 
         for(var i = 0; i < allResults.length; i++) {
             //id of node fits position in array of all calculated entropy/gini values
@@ -518,7 +519,7 @@ $(document).ready(function() {
             if(content[k].startsWith('Gini Gain')) {
                 content[k] = "Gini Gain: <br><br><br>"
             }
-            if(parseInt(content[k].charAt(0))) {
+            if(Number(content[k].charAt(0))) {
                 content[k] = "Gini Gain: <br><br><br>"  // background-color: #F8F9FA   font-weight-bolder  9CA3A8  6B747C
             }
             if(k === 0) {
@@ -536,6 +537,10 @@ $(document).ready(function() {
         }
 
         // Mark rows in table
+        // console.log(allItems)
+        //console.log(rows)
+        //console.log(pie)
+        //console.log(allItems)
         for(var l = 0; l < allItems.length; l++) {
             if (allItems[l].split(',')[0] === spot.toString()) {
                 //remove id for comparison
@@ -546,6 +551,9 @@ $(document).ready(function() {
                 line = line.replace(/,/g, "\t");
                 line = line.replace("<br>", "")
                 for(var m = 0; m < rows.length; m++) {
+                    //console.log(JSON.stringify(line.toString()));
+                    //console.log(JSON.stringify(rows[m].toString()));
+                    //console.log(JSON.stringify(line.toString()) === JSON.stringify(rows[m].toString()))
                     if(JSON.stringify(line.toString()) === JSON.stringify(rows[m].toString())) {
                         document.getElementById("row"+m.toString()).style.backgroundColor = "#939BA2";
                     }
@@ -557,8 +565,8 @@ $(document).ready(function() {
         if(pie.length === 0) {
             var place = 0;
             var nodes = document.getElementById("nodeContent").innerText.split("\n");
-            console.log(nodes)
-            console.log(nodes.length)
+            //console.log(nodes)
+            //console.log(nodes.length)
             for (var i = 0; i < nodes.length; i++) {
                 var v = document.getElementById("button" + (i+2).toString()+"Calc").innerText;
                 console.log(v)

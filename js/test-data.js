@@ -377,6 +377,7 @@ function createTreeBranches() {
         input[i] = input[i].replace(/(<([^>]+)>)/ig," ");
         input[i] = unescapeHTML(input[i]);
     }
+    //console.log(input)
     duplicates_input = countDuplicates(input)
     for(var i = 0; i < input.length; i++) {
         var start = input[0];
