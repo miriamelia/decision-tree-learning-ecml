@@ -321,7 +321,7 @@ var dt = (function () {
                     if(splitId <= id) {
                         if (splitValue.trim() === initV) {
                             if(typeof pivot === 'number') {
-                                if ((attr.trim() === spl.trim()) && (pivot === parseInt(pred))){
+                                if ((attr.trim() === spl.trim()) && (pivot === Number(pred))){
                                     bestSplit = currSplit;
                                     bestSplit.predicateName = predicateName;
                                     bestSplit.predicate = predicate;
