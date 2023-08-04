@@ -123,12 +123,20 @@ function importData(elementId, tableId, dataType) {
 /*
     load default csv data, set id of rows as "row+number" for training data and "row+test+number" for test data.
     default data set is the monster-data.
+    Original Dataset: https://www.kaggle.com/datasets/alphiree/cardiovascular-diseases-risk-prediction-dataset
+    Integrated: Trainset: First 30 samples Testset: Last 10 samples + 14 + 45 (the next ones with heart disease = True)
+    Modification for better usability within the software as an educational tool:
+    -Summarised diseases to disease (Skin-Cancer, cancer, depression, diabetes, arthritis)
+    -Removed height, weight (only BMI)
+    -Removed general health
+    -Removed green vegetables
+    -Adjusted Age single number from range
   */
 function loadDefaultData() {
     emptyAll();
     document.getElementById("testData").innerHTML = "";
-    var trainData = './Files/monster - original.csv';
-    var testData = './Files/monster - original - test.csv';
+    var trainData = './Files/CVD_train.csv';
+    var testData = './Files/CVD_test.csv';
     var tableTest = document.getElementById("testData");
     var table = document.getElementById("data");
     document.getElementById("displayTree").innerText = "";
