@@ -131,6 +131,7 @@ function importData(elementId, tableId, dataType) {
     -Removed general health
     -Removed green vegetables
     -Adjusted Age single number from range
+    -Slightly adjusted values to remove duplicates
   */
 function loadDefaultData() {
     emptyAll();
