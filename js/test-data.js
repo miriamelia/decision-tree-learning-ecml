@@ -135,6 +135,7 @@ $('#test').click(function () {
             var outcome_groundtruth = []
             if(checkTree(tree)) {
                 var check = createTreeBranches();
+                console.log(check)
                 for(var i = 1; i < table.rows.length; i++) {
                     var row = document.getElementById("rowtest"+i.toString());
                     var line = row.innerText.replace(/\s/g, ' ').split(" ");
@@ -257,29 +258,29 @@ function testData(check, line, row, tree, rownumber, headings) {              //
                 var tmp = val[help].trim();
                 tmp = tmp.replace("<", "");
                 tmp = tmp.replace("\u2265", "");
-                if(headings.indexOf(way[way.length-1]) > -1 && !(Number(tmp))) {
+                if(headings.indexOf(way[way.length-1]) > -1 && !(parseFloat(tmp))) {
                     way.push(line[pos].trim());                     // value of attribute
-                    //console.log("attribute")
-                    //console.log(line[pos].trim())
+                    console.log("attribute")
+                    console.log(line[pos].trim())
                 }
-                //console.log(tmp)
-                //console.log(line) // > Testdata
-                if(Number(tmp) || tmp === 0) {
-                    //console.log(check[i])
+                console.log(tmp)
+                console.log(line) // > Testdata
+                if(parseFloat(tmp) || tmp === 0) {
+                    console.log(check[i])
                     var value = "";
-                    //console.log(line[pos].trim())       // Zahlen werte
-                    //console.log(tmp)                    // Vergleichswert
+                    console.log(line[pos].trim())       // Zahlen werte
+                    console.log(tmp)                    // Vergleichswert
                     if (way[way.length - 1] !== val[j].trim()) {
                         way.push(val[j].trim());                        // attribute Name
                         attrName.push(val[j].trim());
                     }
-                    if (Number(tmp) <= Number(line[pos].trim())) {
+                    if (parseFloat(tmp) <= parseFloat(line[pos].trim())) {
                         value = "\u2265" + tmp;
                     } else {
                         value = "<" + tmp;
                     }
-                    //console.log("value after numeric comp")
-                    //console.log(value)
+                    console.log("value after numeric comp")
+                    console.log(value)
                     if(way.indexOf(value) === -1)
                         way.push(value);
                     else
@@ -297,14 +298,17 @@ function testData(check, line, row, tree, rownumber, headings) {              //
                     break;
                 }
             } else if(j === (val.length-1)) {   // check case prediction value = last item in array
-                //console.log("next block check attr?")
-                //console.log(val[j].trim())
+                console.log("last item in array")
+                console.log(val[j].trim())
                 if(equalsCategoryAttribute(val[j].trim()) && !equalsCategoryAttribute(way[way.length-1])) {    // add value found by following the tree from root to leaf
                     resultvalues[rownumber] = val[j].trim();
                     if((way.indexOf(val[j].trim()) === -1))
                         way.push(val[j].trim())
                 }
                 ground_truth = line[line.length-1].trim();
+                console.log(ground_truth)
+                console.log(val[j])
+                console.log(ground_truth === val[j])
                 if(val[j] === undefined)
                     prediction_value = "none"
                 else {
@@ -313,8 +317,8 @@ function testData(check, line, row, tree, rownumber, headings) {              //
                         if((way.indexOf(val[j].trim()) === -1))
                             way.push(val[j].trim());
                         resultWay[rownumber] = way;
-                        //console.log(val[j].trim())
-                        //console.log(resultWay)
+                        console.log(val[j].trim())
+                        console.log(resultWay)
                         return {
                             prediction: true,
                             groundtruth: line[line.length-1].trim(),
@@ -326,7 +330,7 @@ function testData(check, line, row, tree, rownumber, headings) {              //
         }
     }
     resultWay[rownumber] = way;
-    //console.log(resultWay)
+    console.log(resultWay)
     return {
         prediction: false,
         groundtruth: ground_truth,
@@ -405,7 +409,7 @@ function createTreeBranches() {
                     var tmp = help[0].trim();
                     tmp = tmp.replace("<", "");
                     tmp = tmp.replace("\u2265", "");
-                    if(Number(tmp) || tmp === 0) {
+                    if(parseFloat(tmp) || tmp === 0) {
                         var bridge = result[result.length-1].split(" ").join("").split(",")
                         var ind1 = bridge.indexOf("<"+tmp)
                         var ind2 = bridge.indexOf("\u2265"+tmp)
@@ -426,10 +430,9 @@ function createTreeBranches() {
         }
     }
     //console.log(result)
-    //console.log(len_per_attr)
     // Handle Duplicates
     duplicates = countDuplicates(result);
-    console.log(duplicates);
+    //console.log(duplicates);
     if (duplicates.length > 0) {
         idx = 0
         for(var i = 0; i < duplicates.length; i++) {
@@ -602,8 +605,14 @@ function checkTree(tree) {
             return false;
         }
         var check = findAllValues(table, name);
+        //console.log(check)
+        //console.log(tree)
         for (var i = 0; i < tree.length; i++) {
+            // case value follows value should not exist
             if ((check.indexOf(tree[i].toString()) > -1) && (check.indexOf(tree[i + 1].toString()) > -1)) {
+                //console.log(tree[i].toString())
+                //console.log(tree[i + 1].toString())
+                //console.log("Returns False here")
                 return false;
             }
         }

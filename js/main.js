@@ -214,7 +214,7 @@ function treeToHtml(tree) {
 function trees(tree) {
     var subtree = '';
     for(var z = 0; z < tree.trees.length; z++) {
-        if(Number(tree.value[z].split(">").join("")) || Number(tree.value[z].split(">=").join(""))) {
+        if(parseFloat(tree.value[z].split(">").join("")) || parseFloat(tree.value[z].split(">=").join(""))) {
             var name;
             var greaterThan = '\u2265'
             if(tree.value[z].includes(">=")) {
@@ -262,7 +262,8 @@ function setCurrSplit(idNode, text, value, redo) {
     // reset removed splits if new split is being made manually
     if(!redo)
         removedSplits = []
-    idNode = Number(idNode);
+    idNode = parseInt(idNode);
+    //console.log(idNode)
     ids.push(idNode);
     if (idNode <= ids[ids.length - 1]) {
         ids.sort(function (a, b) {
@@ -404,6 +405,8 @@ function getValueCountUpdateIDs(spot, attr, headings) {
     for (var k = 0; k < content.length; k++) {
         values.push(content[k].split(",")[index + 1])
     }
+    //console.log(values[0])
+    //console.log(Number(values[0]))
     if(Number(values[0])) {
         count = 2
     } else
@@ -519,6 +522,7 @@ $(document).ready(function() {
             if(content[k].startsWith('Gini Gain')) {
                 content[k] = "Gini Gain: <br><br><br>"
             }
+            //console.log(content[k].charAt(0))
             if(Number(content[k].charAt(0))) {
                 content[k] = "Gini Gain: <br><br><br>"  // background-color: #F8F9FA   font-weight-bolder  9CA3A8  6B747C
             }
@@ -569,7 +573,6 @@ $(document).ready(function() {
             //console.log(nodes.length)
             for (var i = 0; i < nodes.length; i++) {
                 var v = document.getElementById("button" + (i+2).toString()+"Calc").innerText;
-                console.log(v)
                 if (parseFloat(v) > 0.0000) {
                     place = i+2;
                     break;
@@ -639,6 +642,7 @@ $(document).ready(function() {
     }
 
     $("#testData").on("click", "tr", function (event) {
+        //console.log("EVENT TestData")
         var id = $(this).attr('id');
         id = id.replace("rowtest", "");
         var row0 = document.getElementById('rowtest0').innerText;
