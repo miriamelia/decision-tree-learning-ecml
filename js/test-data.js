@@ -89,9 +89,12 @@ function calculateEvaluation(groundTruth, predictions) {
     // Calculate metrics
     const precision = tp / (tp + fp);
     const recall = tp / (tp + fn);
-    const accuracy = (tp + tn) / (tp + tn + fp + fn)
-    const f1Score = (2 * precision * recall) / (precision + recall);
-
+    const accuracy = (tp + tn) / (tp + tn + fp + fn);
+    var f1Score = 0;
+    if (!(precision === 0 && recall === 0)) {
+        f1Score = (2 * precision * recall) / (precision + recall);
+    }
+    
     return {
         TP: tp,
         TN: tn,

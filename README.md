@@ -13,13 +13,13 @@ This tool is designed for anybody who'd like to start exploring the domain of ma
 - Attribute values should be uniquely assignable (no duplicates regarding different attributes)
 - Values should be one word / a number, but no *.0, then integer
 - Original Dataset: https://www.kaggle.com/datasets/alphiree/cardiovascular-diseases-risk-prediction-dataset
-    Integrated: Trainset: First 30 samples Testset: Last 10 samples + 14 + 45 (the next ones with heart disease = True)
+    Integrated: Trainset: First 30 samples Testset: last 10 + more TRUE (Rows 308846-308855 + 308842 + 308811 + 308674 + 308628 +308569)
     Modification for better usability within the software as an educational tool:
     - Summarised diseases to disease (Skin-Cancer, cancer, depression, diabetes, arthritis)
     - Removed height, weight (only BMI)
     - Removed general health
     - Removed green vegetables
-    - Adjusted Age single number from range
+    - Adjusted Age single number from range (oscillating between min / max)
 
 # Get started
 
